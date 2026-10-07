@@ -1,0 +1,21 @@
+[Unit]
+Description=Media worker internal-destination egress guard
+Wants=network-online.target
+After=network-online.target firewalld.service
+Before=auto-uploader.service twspace-crawler.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/python3 /usr/local/libexec/media_egress_guard.py apply
+ExecReload=/usr/bin/python3 /usr/local/libexec/media_egress_guard.py apply
+User=root
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+CapabilityBoundingSet=CAP_NET_ADMIN
+RestrictAddressFamilies=AF_UNIX AF_NETLINK
+
+[Install]
+WantedBy=multi-user.target

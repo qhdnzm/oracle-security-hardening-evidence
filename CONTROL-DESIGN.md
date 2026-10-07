@@ -1,6 +1,6 @@
 # Narrow containment design and acceptance plan
 
-Status at baseline publication: **PLANNED — not yet deployed**.
+Status: **DEPLOYED — bounded network acceptance passed on 2026-10-08 around 02:22 KST**. The initial evidence commit correctly recorded the then-planned state; [VERIFICATION.md](VERIFICATION.md) records the subsequent execution.
 
 ## Design decision
 
@@ -16,6 +16,8 @@ Do not alter trading/research identities, SSH routing, the existing public firew
 4. Deny destinations local to the host and private, loopback, link-local, carrier-grade NAT/tailnet and multicast/reserved ranges for both address families as appropriate.
 5. Preserve normal public-internet connections; do not flush or replace the system ruleset.
 
+The implemented output hook uses a **positive UID match** that jumps to a separate policy chain. This matters for kernel-generated packets with no socket owner: using a negative UID test followed by unrestricted deny rules could accidentally apply the policy to packets outside the intended identities.
+
 The DNS exception must not allow arbitrary ports to the resolver. In this environment the resolver and cloud metadata service share a link-local address, so allowing that entire address would reopen the metadata route.
 
 ## Implementation requirements
@@ -27,6 +29,10 @@ The DNS exception must not allow arbitrary ports to the resolver. In this enviro
 - Scoped rollback removes only this task's table and dependency drop-ins, leaving the system firewall untouched.
 - Compare uploader/crawler PIDs and restart counts around application; capture failures and rollback if required.
 - Never write secret-bearing units, environment dumps, credential values or authentication files into the evidence package.
+
+The helper resolves the current UIDs and DNS resolver at each load and rejects identity drift, root/login-capable service accounts, malformed resolver configuration, and a pre-existing table without the ownership marker. Resolver changes require a guard reload; no background watcher was added. The dedicated guard unit is enabled and media units require it before future starts. Cold-boot execution was not tested.
+
+Rollback removes the new dependency drop-ins **before** stopping the guard, so systemd does not stop media services through a still-present Requires edge. The old global firewall and application sources are never restored from a broad snapshot.
 
 ## Acceptance evidence
 
@@ -50,7 +56,7 @@ Failed tests are results, not evidence to omit. Evidence must distinguish a host
 
 SSH hardening must preserve a working administrative session, prepare automatic rollback, validate syntax/effective options, reload rather than restart, and prove a new operator connection before cancelling rollback. The historical workflow also required an authenticated cloud-console recovery path; do not invent that evidence.
 
-rpcbind currently has an active tracing dependency. Stop/mask is deferred until that dependency and the intended monitoring behavior are understood. Port-111 listening is not equivalent to internet exposure.
+The initial expanded dependency graph included an active tracing service through a shared target; direct RequiredBy/WantedBy inspection did not establish an actual tracing-to-rpcbind dependency. No active non-portmapper registration or NFS consumer was observed. rpcbind was not changed in this media-identity rollout. Port-111 listening is not equivalent to internet exposure.
 
 ## References
 

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "DEPLOYED",
+  "accepted_at_kst": "2026-10-08T02:22:54.999627+09:00",
+  "scope": "Two media service identities only",
+  "internal_connection_attempts_denied": 10,
+  "media_public_tls_checks_passed": 8,
+  "dns_preserved_for_both_media_accounts": true,
+  "operator_control_unchanged": true,
+  "media_pids_and_restart_counts_unchanged": true,
+  "guard_reload_passed": true,
+  "guard_enabled": true,
+  "media_start_dependency_present": true,
+  "reboot_tested": false,
+  "files": [
+    {
+      "file": "media_egress_guard.py",
+      "installed_path": "/usr/local/libexec/media_egress_guard.py",
+      "sha256": "5827b167c571a14ab9d71bd14bfa8a7becf2e6f958c65c5e07fb36c9689b41b3",
+      "local_matches_installed": true
+    },
+    {
+      "file": "media-egress-guard.service",
+      "installed_path": "/etc/systemd/system/media-egress-guard.service",
+      "sha256": "b69c417daf13f88f75e2108a59f6f472263d1aa2c4e51e88e29e0ce524f20d25",
+      "local_matches_installed": true
+    },
+    {
+      "file": "20-media-egress-guard.conf",
+      "installed_path": "/etc/systemd/system/auto-uploader.service.d/20-media-egress-guard.conf",
+      "sha256": "82512b2abeaa2e25d03965a591f424a6ec3d716e73391dd53dcb061fda7dbbba",
+      "local_matches_installed": true
+    },
+    {
+      "file": "20-media-egress-guard.conf",
+      "installed_path": "/etc/systemd/system/twspace-crawler.service.d/20-media-egress-guard.conf",
+      "sha256": "82512b2abeaa2e25d03965a591f424a6ec3d716e73391dd53dcb061fda7dbbba",
+      "local_matches_installed": true
+    }
+  ],
+  "rollout_attempts": [
+    "Initial table marker missing; success refused; exact-scope recovery completed",
+    "IPv4 errno expectation too narrow; automatic rollback completed",
+    "Corrected marker and evidence-based acceptance passed"
+  ],
+  "application_code_modified": false,
+  "production_webhook_or_upload_or_order_test_performed": false
+}

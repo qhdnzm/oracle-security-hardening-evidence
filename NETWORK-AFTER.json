@@ -1,0 +1,171 @@
+{
+  "identities": {
+    "opc": {
+      "dns_resolution": {
+        "ok": true
+      },
+      "loopback_ipv4": {
+        "connected": true
+      },
+      "loopback_ipv6": {
+        "connected": true
+      },
+      "metadata_http_port_no_payload": {
+        "connected": true
+      },
+      "private_host_ssh_no_auth": {
+        "connected": true
+      },
+      "public_tls": {
+        "api.chzzk.naver.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "discord.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "www.youtube.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "x.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        }
+      },
+      "tailnet_host_ssh_no_auth": {
+        "connected": true
+      },
+      "trusted_dns_tcp53": {
+        "connected": true
+      }
+    },
+    "svc_twspace": {
+      "dns_resolution": {
+        "ok": true
+      },
+      "loopback_ipv4": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "loopback_ipv6": {
+        "connected": false,
+        "errno": "EACCES"
+      },
+      "metadata_http_port_no_payload": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "private_host_ssh_no_auth": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "public_tls": {
+        "api.chzzk.naver.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "discord.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "www.youtube.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "x.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        }
+      },
+      "tailnet_host_ssh_no_auth": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "trusted_dns_tcp53": {
+        "connected": true
+      }
+    },
+    "svc_uploader": {
+      "dns_resolution": {
+        "ok": true
+      },
+      "loopback_ipv4": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "loopback_ipv6": {
+        "connected": false,
+        "errno": "EACCES"
+      },
+      "metadata_http_port_no_payload": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "private_host_ssh_no_auth": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "public_tls": {
+        "api.chzzk.naver.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "discord.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "www.youtube.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        },
+        "x.com": {
+          "ok": true,
+          "protocol": "TLSv1.3"
+        }
+      },
+      "tailnet_host_ssh_no_auth": {
+        "connected": false,
+        "errno": "EHOSTUNREACH"
+      },
+      "trusted_dns_tcp53": {
+        "connected": true
+      }
+    }
+  },
+  "method": "Loopback sentinels; internal TCP handshakes without application data; normal DNS and public certificate-verified TLS only.",
+  "no_credential_files_accessed": true,
+  "no_webhook_or_upload_or_order": true,
+  "observed_at_kst": "2026-10-08T02:22:54.999627+09:00",
+  "schema_version": 1,
+  "service_identity_unchanged_during_probe": true,
+  "services_after": {
+    "auto-uploader.service": {
+      "ActiveState": "active",
+      "MainPID": "268637",
+      "NRestarts": "0",
+      "User": "svc_uploader"
+    },
+    "twspace-crawler.service": {
+      "ActiveState": "active",
+      "MainPID": "47812",
+      "NRestarts": "0",
+      "User": "svc_twspace"
+    }
+  },
+  "services_before": {
+    "auto-uploader.service": {
+      "ActiveState": "active",
+      "MainPID": "268637",
+      "NRestarts": "0",
+      "User": "svc_uploader"
+    },
+    "twspace-crawler.service": {
+      "ActiveState": "active",
+      "MainPID": "47812",
+      "NRestarts": "0",
+      "User": "svc_twspace"
+    }
+  }
+}

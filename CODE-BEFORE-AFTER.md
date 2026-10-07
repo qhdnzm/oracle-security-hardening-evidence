@@ -111,7 +111,7 @@ flowchart LR
   OTHER[Other service identities] --> EXIST[Existing network policy unchanged]
 ```
 
-At baseline publication this last diagram is the **planned control**, not a deployment claim. See the current assessment and subsequent acceptance evidence for the final status.
+This October control was subsequently **deployed and verified on October 8, 2026**. The initial evidence commit predates its successful rollout. See [VERIFICATION.md](VERIFICATION.md) for exact before/after evidence and [media_egress_guard.py](media_egress_guard.py) for the implemented policy.
 
 ## Source anchors
 

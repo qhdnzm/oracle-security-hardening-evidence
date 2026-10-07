@@ -1,0 +1,4 @@
+5827b167c571a14ab9d71bd14bfa8a7becf2e6f958c65c5e07fb36c9689b41b3  /usr/local/libexec/media_egress_guard.py
+b69c417daf13f88f75e2108a59f6f472263d1aa2c4e51e88e29e0ce524f20d25  /etc/systemd/system/media-egress-guard.service
+82512b2abeaa2e25d03965a591f424a6ec3d716e73391dd53dcb061fda7dbbba  /etc/systemd/system/auto-uploader.service.d/20-media-egress-guard.conf
+82512b2abeaa2e25d03965a591f424a6ec3d716e73391dd53dcb061fda7dbbba  /etc/systemd/system/twspace-crawler.service.d/20-media-egress-guard.conf

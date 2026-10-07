@@ -1,0 +1,1 @@
+{"accounts": ["svc_uploader", "svc_twspace"], "installed": true, "packet_counters": {"deny_host_local": 0, "deny_nonpublic_ipv4": 0, "deny_nonpublic_ipv6": 0, "public_egress": 0, "trusted_dns": 0}, "rendered_rules_sha256": "f027299cc6c86e0772ca1290b3cf2685da9d42b957b374edfdf6aba1d6d58f07", "resolver_count": 1, "scope": "media_pipeline_guard"}
