@@ -1,64 +1,67 @@
-# Securing a cloud media pipeline
+# Cloud media pipeline: security analysis and verified remediation
 
-**Least privilege · Secret handling · Internal-network containment · Controlled verification**
+**Owner-administered Oracle Linux · Python / Node.js automation · Least privilege · Network isolation**
 
-Original remediation: **July 2026** · Evidence publication and follow-up: **October 2026**
+This project documents defensive security work on infrastructure maintained by **[hwangbo0718](https://github.com/qhdnzm)**: identifying excessive trust between externally connected services and a privileged operator account, reducing credential exposure, and enforcing a separate network boundary around media workers.
 
-This repository records the reconstruction of a July 2026 security remediation, its reconciliation with a replacement Oracle Linux server in October 2026, and follow-up defense-in-depth work. All dates and operational times are **Asia/Seoul (KST, UTC+9)**.
+**Start here: [Security assessment and remediation report](SECURITY-REPORT.md)**
 
-The original work separated external media and messaging integrations from the operator's privileged trust domain. An October follow-up added an independent outbound network boundary and tested it on the owner-administered Oracle Linux host.
+**Application scope: [Work and whose systems it covers](CVP-WORK-SUMMARY.md)**
 
-## Measured result of the October follow-up
+Original remediation: **July 2026**. Follow-up implementation, live verification and publication: **October 2026**. Times in the evidence are KST (UTC+9).
 
-| Boundary / compatibility check | Before | After |
-| --- | --- | --- |
-| Media identities → metadata HTTP port | TCP reachable | Denied |
-| Media identities → IPv4 and IPv6 loopback | TCP reachable | Denied |
-| Media identities → host private/tailnet SSH listener | TCP reachable, no authentication attempted | Denied |
-| Trusted DNS | Working | Working; port 53 exception only |
-| Public YouTube, Discord, Chzzk and X fronts | Certificate-verified TLS works | Certificate-verified TLS works |
-| Operator-account control probes | Working | Unchanged |
-| Existing uploader and crawler processes | Running | Same PIDs and restart counts |
+## Outcome
 
-**10/10 targeted internal connection attempts denied across two media identities; 8/8 media-identity public TLS checks passed.** These are bounded connectivity checks, not real uploads, webhook deliveries, exploitation of a third-party system, or a comprehensive security certification. [Read the method and limitations](VERIFICATION.md).
-
-## What the original problem was
-
-An internet-facing integration does not need to accept inbound HTTP connections to create a server trust-boundary risk. A Discord command bot, a media downloader, and an uploader process external data. If they run as the same operator account as sensitive workloads, a compromised dependency or unsafe input handler can inherit access to those workloads and possibly passwordless administrative privileges.
-
-The recovered July documents describe precisely this shared-account problem. They describe hardening, not a confirmed intrusion. They do **not** establish that possession of a Discord notification webhook alone allowed arbitrary server commands, or that a specific SSRF exploit was reproduced.
-
-## Evidence map
-
-| Document | Purpose |
+| Security or compatibility property | Observed result |
 | --- | --- |
-| [HISTORY.md](HISTORY.md) | Original risk, July controls, historical results, and evidence limitations |
-| [CODE-BEFORE-AFTER.md](CODE-BEFORE-AFTER.md) | Sanitized application diffs, design rationale and attack-path diagrams |
-| [CURRENT-ASSESSMENT.md](CURRENT-ASSESSMENT.md) | October observations, migration drift, and prioritized additional risks |
-| [CONTROL-DESIGN.md](CONTROL-DESIGN.md) | Implemented network control, compatibility boundaries, rollback and acceptance criteria |
-| [VERIFICATION.md](VERIFICATION.md) | Before/after test results, deployment evidence, and rollout corrections |
-| [EVIDENCE-PROVENANCE.json](EVIDENCE-PROVENANCE.json) | SHA-256 fingerprints of the locally retained historical documents |
-| [media_egress_guard.py](media_egress_guard.py) | Exact deployed policy renderer and scoped lifecycle helper |
-| [probe_media_egress.py](probe_media_egress.py) | Reproducible, bounded acceptance probe |
+| Targeted internal connections from the two media identities | **10/10 denied after remediation**; reachable in the baseline |
+| Public-provider TLS connectivity from those identities | **8/8 passed** with certificate verification |
+| Trusted DNS | Preserved with a destination-port-53 exception |
+| Operator-account control probes | Unchanged |
+| Existing uploader and crawler | Same PIDs and restart counts across the accepted deployment |
+| Published history at revision `9c375f0` | **0 Gitleaks findings** across 2 commits and 22 current files |
 
-## Status vocabulary
+The network results cover controlled TCP, DNS and TLS checks. They do not assert a completed upload or an exploited application vulnerability. [Method, receipts and limits →](VERIFICATION.md)
 
-- **HISTORICALLY_REPORTED_DEPLOYED:** a retained contemporary report records deployment; this is not a new observation of the retired server.
-- **OBSERVED:** a current read-only inspection returned the stated value.
-- **PLANNED:** proposed control; no current deployment claim.
-- **DEPLOYED:** the exact new control was installed and the stated acceptance evidence exists.
-- **UNVERIFIED:** no sufficient direct observation or test exists.
+## The security problem
 
-## Publication boundaries
+The original integrations processed external messages and media within the operator's privileged trust domain. A compromised integration could therefore reach unrelated application files and broad administrative privileges. The July remediation separated service identities, constrained filesystem access, made code root-owned, and moved sensitive values out of application source and process arguments.
 
-This is a curated evidence package, not a copy of the production directory or the parent research repository. No credentials, browser state, real webhook URLs, host addresses, cloud resource identifiers, private media identifiers, trading records, or full runtime logs are included. The existing local-only repository is not connected to GitHub.
+The October assessment confirmed that filesystem isolation alone left another boundary open: media-worker identities could still connect to the host's loopback, private and tailnet addresses and the cloud metadata HTTP port. A UID-scoped nftables policy now contains that traffic independently of the Python, Node.js and media-processing code.
 
-Document hashes bind these summaries to retained originals. They do not prove an independent timestamp, the absence of an intrusion, or comprehensive security. The original material remains local because it contains operational details outside the scope of publication.
+```mermaid
+flowchart LR
+    EXT[External media and integrations] --> WORK[Separate media service identities]
+    WORK --> FS[Restricted filesystem and privileges]
+    WORK --> NET[UID-scoped network policy]
+    NET --> DNS[Trusted DNS: port 53 only]
+    NET --> PUBLIC[Public provider endpoints]
+    NET -. denied .-> INTERNAL[Loopback / private network / tailnet]
+    NET -. denied .-> META[Metadata HTTP]
+```
 
-## Verification boundaries
+## Engineering decisions that matter
 
-The user authorized bounded tests on the current host. Acceptance tests may inspect service properties, account boundaries, firewall enforcement, DNS, and anonymous HTTPS reachability. They must not send notification webhooks, create or modify orders, submit YouTube uploads, inspect secret stores, or invoke an unrelated workload. Boot persistence must be distinguished from an actual reboot test.
+- **DNS and metadata share an address.** Allowing that whole address for DNS would also permit metadata HTTP. The exception matches both the resolver address and TCP/UDP port 53.
+- **Packet ownership is matched positively.** Only the two media socket UIDs enter the restricted chain, avoiding accidental interference with unrelated or ownerless kernel packets.
+- **Denial is supported by controls.** Live loopback listeners, before/after probes, a working operator-account control and exact reject counters distinguish a firewall rejection from a missing service.
+- **The fix preserves operations.** Atomic replacement affects one dedicated nftables table. The deployment and a subsequent guard reload preserved the running media processes. Exact-scope rollback and corrected rollout attempts are documented.
 
-## System ownership and purpose
+## Evidence and implementation
 
-This case study covers infrastructure operated and administered by the repository owner. The purpose is defensive review, remediation and verification of the owner's own service integrations. Public provider checks are ordinary anonymous TLS connections; they are not vulnerability assessments of those providers.
+| Review question | Evidence |
+| --- | --- |
+| What was affected, and under what conditions? | [Security report](SECURITY-REPORT.md) |
+| What actually changed in the application and service boundary? | [Before/after code and diagrams](CODE-BEFORE-AFTER.md) |
+| What was deployed in July? | [Historical remediation](HISTORY.md) · [source-document fingerprints](EVIDENCE-PROVENANCE.json) |
+| How does the October network control work? | [Control design](CONTROL-DESIGN.md) · [deployed helper](media_egress_guard.py) · [systemd unit](media-egress-guard.service) |
+| Can the results be checked? | [Verification](VERIFICATION.md) · [before](NETWORK-BEFORE.json) / [after](NETWORK-AFTER.json) · [bounded probe](probe_media_egress.py) |
+| Does the published implementation match deployment? | [Deployment receipt](DEPLOYMENT-RECEIPT.json) · [installed hashes](INSTALLED-SHA256.txt) |
+| What remains to improve? | [Current assessment and risk register](CURRENT-ASSESSMENT.md) |
+| Was the original published history scanned for secrets? | [Secret-scan receipt](SECRET-SCAN.json) |
+
+## Ownership, methodology and scope
+
+The assessed server and deployed automation are owner-administered infrastructure. Findings are supported by retained source artifacts and authorized tests on that infrastructure. Third-party provider fronts received ordinary anonymous TLS connections; provider systems were not subjected to vulnerability testing.
+
+This is an owner-published security assessment and remediation case study. Historical deployment reports, current measurements and future proposals are labeled separately. Actual host addresses, authentication material, private media and full production logs are excluded; verification scope and remaining work are retained in the linked evidence.

@@ -26,7 +26,7 @@ The contemporary deployment result reports:
 
 Reported acceptance evidence: both services running under the intended identities with zero recorded restarts; syntax/import and configuration parsing checks; shared-media create/read/delete checks; channel monitoring initialization; no observed permission loop or OOM; 27 protected services unchanged in active state, main PID and restart count.
 
-The report records `systemd-analyze security` exposure scores improving from **9.2 to 3.6**. This score measures configuration exposure. A natural end-to-end recording/conversion/upload remained outstanding at that reporting point.
+The report records `systemd-analyze security` exposure scores improving from **9.2 to 3.6**, reflecting reduced configuration exposure. A natural end-to-end recording/conversion/upload remained outstanding at that reporting point.
 
 ## 4. Discord and host hardening — July 10–11
 

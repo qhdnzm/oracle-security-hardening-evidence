@@ -1,6 +1,6 @@
 # Code before and after: reducing the integration's blast radius
 
-**Historical application changes: July 10, 2026.** These short, sanitized excerpts are reconstructed from the retained transformation program and service templates. They show the changes specified by the retained transformation program. Names are retained where harmless, secrets are replaced with explicit placeholders, and unrelated lines are omitted.
+**Historical application changes: July 10, 2026.** These sanitized excerpts reconstruct the actual changes specified by the retained transformation program and service templates. Secret values are replaced with explicit placeholders and unrelated lines are omitted. The source artifacts are linked to their fingerprints in `EVIDENCE-PROVENANCE.json`.
 
 ## 1. Webhook capability moved out of application source
 

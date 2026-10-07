@@ -21,3 +21,5 @@
 !probe_media_egress.py
 !media-egress-guard.service
 !20-media-egress-guard.conf
+!SECURITY-REPORT.md
+!SECRET-SCAN.json
