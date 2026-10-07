@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "collected_at_kst": "2026-10-08T02:11:39.3377888+09:00",
+  "purpose": "Content fingerprints of locally retained historical evidence; not independent timestamp attestation.",
+  "sources": [
+    {
+      "source_id": "OUTPUT/uploader_security_hardening_20260710/DEPLOYMENT_RESULT_KO.md",
+      "sha256": "012f16009b3fcee909bba1b70ec4dcc8623ba8f4842cf059b2125fc9e2c8865f",
+      "uploaded_original": false
+    },
+    {
+      "source_id": "OUTPUT/uploader_security_hardening_20260710/README_KO.md",
+      "sha256": "f8fff7edd5226d71a4b2d7e87baf78142ca86a7728394f4fb5701a0bcb1d98ed",
+      "uploaded_original": false
+    },
+    {
+      "source_id": "OUTPUT/uploader_security_hardening_20260710/transform_uploader.py",
+      "sha256": "3e17a29d7f0c0d130555335db8982ca5ec636daeb66cdebeb00ad06015ca7902",
+      "uploaded_original": false
+    },
+    {
+      "source_id": "OUTPUT/uploader_security_hardening_20260710/prepare_streamlink_config.py",
+      "sha256": "f1679a548e0c4c36dcb7b9b8dc61f08cb2e903db7b42c19478fbb25033727cd4",
+      "uploaded_original": false
+    },
+    {
+      "source_id": "OUTPUT/uploader_security_hardening_20260710/auto-uploader.service",
+      "sha256": "7ade8c3c2eaf19b8a60ab9994cf0c2973bdb8b4f9eaef886e68632985c367e85",
+      "uploaded_original": false
+    },
+    {
+      "source_id": "OUTPUT/oracle_security_release_20260710_2200/FINAL_REPORT_20260711_0055_KO.md",
+      "sha256": "9ac8400663e31be5a61ad940e2b4e5da7e702f307b7dee06f09c8dee914e25e1",
+      "uploaded_original": false
+    },
+    {
+      "source_id": "OUTPUT/oracle_security_release_20260710_2200/ssh/HOST_PLAN_KO.md",
+      "sha256": "fece1df5c77ef2c7df16831d11da94c0762221d18119d9cd03e64de63bf0318a",
+      "uploaded_original": false
+    },
+    {
+      "source_id": "OUTPUT/oracle_security_release_20260710_2200/discord/README_KO.md",
+      "sha256": "ea7a40ac1cf3a04ffd8d5dd6eae2546559e240e13c32528a360e89eb6df96eb3",
+      "uploaded_original": false
+    }
+  ]
+}
